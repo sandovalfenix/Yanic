@@ -18,10 +18,10 @@ class Config{
 		
 		$this->twig = new \Twig_Environment($this->loader);
 		$this->assets = array('assets' => '/Templates/assets');
-	}
-
-	public function addGlobal($name, $vars = array()){	
-		$this->twig->addGlobal($name, $vars);
+		$filter = new \Twig_SimpleFilter('encrypt', function ($string){
+		    return $this->openCypher($string);
+		});
+		$this->twig->addFilter($filter);
 	}
 
 	public function render($template, $vars = array()){	
@@ -65,7 +65,7 @@ class Config{
 		return array('send' => true, 'msj' => $msj);
 	}
 
-	function openCypher ($action='encrypt',$string=false){
+	function openCypher ($string=false, $action='encrypt'){
 	    $action = trim($action);
 	    $output = false;
 

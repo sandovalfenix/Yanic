@@ -1,0 +1,41 @@
+{% extends 'layout/default_layout.twig' %}
+{% use 'views/menu/menu.twig' %}
+{% block container %}
+<!--INITIAL BOX MOBILE-->
+<div class="col-md-4">
+	<!--INITIAL RESUMEN DEPOSITO-->
+	<div class="card bg-light mb-3" style="max-width: 100%;">
+		<div class="card-header">Resumen</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-8">
+					Cantidad a depostiar
+					<hr>
+					Paypal | Real
+					<hr>
+					Fee
+					<hr>
+					Valor de transacion
+					<hr>
+					tiempo estimado de respuesta
+					<hr>
+				</div>
+				<div class="col-4">
+					000
+					<hr>
+					Paypal | Real
+					<hr>
+					09090
+					<hr>
+					9090909
+					<hr>
+					1:hr
+					<hr>
+				</div>
+			</div>
+				<button class="btn btn-success btn-lg btn-block">FINALIZAR</button>
+		</div>
+		<!--CLOSE COSOLIDADOS-->
+	</div>
+</div>
+{% endblock %}

@@ -7,7 +7,7 @@ use Config\Config;
 /**
  * @start homepage
  */
-class DefaultController extends Config {
+class SignController extends Config {
 
 	public function __construct() {
 		parent::__construct();
@@ -15,6 +15,6 @@ class DefaultController extends Config {
 	}
 
 	public function index() {
-		$this->render('homepage/index.twig');
+		$this->render('sign/sign-in.twig');
 	}
 }

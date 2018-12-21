@@ -1,0 +1,43 @@
+{% extends 'layout/default_layout.twig' %}
+{% use 'views/menu/menu.twig' %}
+{% block container %}
+<!--INITIAL BOX MOBILE-->
+<div class="col-md-4">
+	<form>
+		<div class="form-group">
+			<label for="exampleInputEmail1" class="header-text header-text_lm">Clave PIN</label>
+			<input type="email" class="form-control form-control-lg" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="'PIN' de 6 Digitos Ej:980983">
+			<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+		</div>
+		<!--KEYBOARD ATH-->
+		<div class="form-group">
+			<label for="exampleInputPassword1">KEY BOARD OFFICIAL</label>
+				<div class="">
+					<button class="keyboard-button-left-top">1</button>
+					<button class="keyboard-button-center">2</button>
+					<button class="keyboard-button-right-top">3</button>
+				</div>
+				<div class="">
+					<button class="keyboard-button-left">4</button>
+					<button class="keyboard-button-center">5</button>
+					<button class="keyboard-button-right">6</button>
+				</div>
+				<div class="">
+					<button class="keyboard-button-left">7</button>
+					<button class="keyboard-button-center">8</button>
+					<button class="keyboard-button-right">9</button>
+				</div>
+				<div class="">
+					<button class="keyboard-button-left-bottom">@</button>
+					<button class="keyboard-button-center">0</button>
+					<button class="keyboard-button-right-bottom">-</button>
+				</div>
+				<div class="space_top_lg"></div>
+			<button type="button" class="btn btn-outline-primary btn-lg btn-block">Confirmar</button>
+		</div>
+		<!--CLOSE KEYBOARD-->
+		<hr>
+			<small id="emailHelp" class="form-text text-muted header-text header-text_sm_center">¿Olvidastes tu PIN?</small>
+	</form>
+</div>
+{% endblock %}

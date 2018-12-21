@@ -1,0 +1,27 @@
+{% extends 'layout/default_layout.twig' %}
+{% use 'views/menu/menu.twig' %}
+{% block container %}
+<!--INITIAL BOX MOBILE-->
+<div class="col-md-4">
+	<div class="card bg-dark text-white">
+		<img class="card-img" src="{{assets}}/img/games/pokemmo.png" alt="Card image">
+	</div>
+	<div class="space_top_lg"></div>
+	<!--INITIAL GAMING LIST MOBILE-->
+	<button style="white-space: normal;" class="btn-wrap_nm btn btn-primary btn-lg btn-block btn-selection_blue">
+		<span class="fas fa-money-bill"></span>
+			<h5>BUY</h5>
+		¡Aqui podras comprar todo lo relacionado con PokeMMO!
+	</button>
+	</a>
+	<!--CLOSE GAMING LIST-->
+	<div class="space_top_lg"></div>
+	<hr>
+	<!--INITIAL GAMING LIST MOBILE-->
+	<button style="white-space: normal;" class="btn-wrap_nm btn btn-primary btn-lg btn-block btn-selection_blue">
+		<span class="fas fa-bullhorn"></span>
+			<h5>SELL</h5>
+		¡Aqui podras crear y administrar tus "Anuncios de compras"!
+	</button>
+</div>
+{% endblock %}

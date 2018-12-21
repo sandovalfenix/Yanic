@@ -16,4 +16,5 @@ Twig_Autoloader::register();
 Autoload::run();
 $request = new Request();
 new Router($request);
-$_SESSION['ROLE'] = 'INVITADO';
+
+

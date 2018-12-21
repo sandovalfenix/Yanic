@@ -17,10 +17,6 @@ class Request {
 	public function getArgument(){
 		return $this->argument;
 	}
-	public function getView(){
-		return $this->view;
-	}
-
 	public function setController($controller){
 		$this->controller = ucfirst($controller)."Controller";
 	}

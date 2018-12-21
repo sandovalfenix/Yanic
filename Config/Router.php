@@ -19,13 +19,14 @@ class Router {
 
 		    if ($check) {
 		    	$object = new $class_controller;
-		    	$method = (empty($request->getMethod())) ? NULL : $request->getMethod();
+		    	$method = (empty($request->getMethod())) ? 'home' : $request->getMethod();
 
 				if (method_exists($object, $method)) {					
 					$rm = new \ReflectionMethod($class_controller, $method);
-					$role = (strrpos($rc->getDocComment(), "@role")) ? explode(",", trim(str_replace(array('"', "*", "/", "","@role"),"",$rc->getDocComment()))) : array(NULL);
+
+					$role = (strrpos($rc->getDocComment(), "@role")) ? explode(",", trim(str_replace(array('"', "*", "/", " ", "@role"),"",$rc->getDocComment()))) : array(NULL);
+					
 				    $authenticate = (isset($_SESSION['ROLE']) && !in_array(NULL, $role)) ? in_array(strtoupper($_SESSION['ROLE']), $role) : in_array(NULL, $role);
-				    
 				    if ($authenticate) {
 					    $data = (empty($request->getArgument())) ? call_user_func(array($object, $method)) : call_user_func_array(array($object, $method), explode('$', $request->getArgument()));
 					}

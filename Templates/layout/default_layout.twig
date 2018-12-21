@@ -8,13 +8,27 @@
 	    <title>{% block title %}{% endblock %}</title>
 		<link rel='icon' type='image/ico' href="{{assets}}/img/icon.png">
 	    <!-- Styles CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-		{% block stylesheet %}{% endblock %}
+	    {% block styles %}
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<style>
+			img[src*="https://cdn.rawgit.com/000webhost/logo/e9bd13f7/footer-powered-by-000webhost-white2.png"] {
+			    display: none;
+			}
+		</style>
+		<!--WGC STYLE -->
+		<link rel="stylesheet" type="text/css" href="{{assets}}/css/wgc.css">
+		<!--cdn font icon-->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		{% endblock %}
+		{% block stylesMore %}{% endblock %}
 
 		<!-- JavaScript  -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-		{% block javascript %}{% endblock %}
+		{% block script %}		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		{% endblock %}
+		{% block scriptMore %}{% endblock %}
 	</head>
 	{% block body %}
 	<body>
@@ -22,13 +36,20 @@
 		{% block header %}{% endblock %}
 
 		<!-- Contenido  -->
-		{% block container %}{% endblock %}
-
+		<section class="container-fluid">
+			<div class="row space_top_lg">
+				{% block container %}{% endblock %}
+				<footer class="col-sm">
+					<hr>
+					<small class="form-text text-muted header-text header-text_sm_center">Copyright 2018 | Threetanium fundation s.a</small>
+				</footer>
+			</div>
+		</section>
 		<!-- Pie de Pagina  -->
-		{% block footer %}{% endblock %}
-
+		
+		{% block menu %}{% endblock %}
 		<!-- Script JS -->
-		{% block script %}{% endblock %}		
+		{% block scriptEnd %}{% endblock %}	
 	</body>
 	{% endblock %}
 </html>
