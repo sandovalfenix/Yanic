@@ -18,6 +18,7 @@ class Config{
 		
 		$this->twig = new \Twig_Environment($this->loader);
 		$this->assets = array('assets' => '/Templates/assets');
+		$this->twig->addGlobal('session', $_SESSION);
 		$filter = new \Twig_SimpleFilter('encrypt', function ($string){
 		    return $this->openCypher($string);
 		});

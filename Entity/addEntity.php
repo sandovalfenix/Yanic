@@ -1,11 +1,26 @@
 <?php
+namespace Entity;
 
-/**
- *	Para crear una tabla : www.ejemplo.dev/Entity/AddEntity.php
- **/
+use Entity\Connect; 
 
-$tabla = ucwords('Archivo'); 
-$properties = array('id', 'nombre_corto', 'nombre_largo', 'extension', 'email', 'origen'); 
+
+class addEntity extends Connect {
+	public function __construct(){
+		parent::__construct();
+	}
+
+	public function createTable($db){
+		
+		$Query = $this->prepare('SHOW FULL TABLES FROM '.$db);
+		$Query->execute();
+		$arrays = $Query->fetchAll($this::FETCH_ASSOC);
+foreach ($arrays as $array => $tables) {
+
+$tabla = ucwords($tables['Tables_in_'.$db]);
+$Query = $this->prepare('SHOW COLUMNS FROM '.$tabla);
+$Query->execute();
+$arrays = $Query->fetchAll($this::FETCH_ASSOC);
+$properties = array();
 
 $atributos = '';
 $attr = '';
@@ -14,29 +29,36 @@ $values = '';
 $bindParam = '';
 
 $i=0;
-foreach ($properties as $property) {	
-	$atributos .= "private \$".$property.";\n\t";
-	if($i==0){ 
-		$idProperty = $property;
-	}else{
-		$attr .= ($i == 1) ? "$property" : ", $property";
-		$values .= ($i == 1) ? ":$property" : ", :$property";
-		$bindParam .= "\$Query->bindParam(\":$property\", \$this->".$property.");\n\t\t";	
-	}	
-	$setter .= "public function set".ucwords($property)."(\$".$property.") {
-		\$this->".$property." = \$".$property.";
+foreach ($arrays as $array => $property) {
+$atributos .= "private \$".$property['Field'].";\n\t";
+if($property['Key'] == 'PRI'){ 
+	$idProperty = $property['Field'];
+}else{
+	$attr .= ($i == 1) ? $property['Field'] : ", ".$property['Field'];
+	$values .= ($i == 1) ? ":".$property['Field'] : ", :".$property['Field'];
+	$bindParam .= "\$Query->bindParam(\":".$property['Field']."\", \$this->".$property['Field'].");\n\t\t";	
+}
+if ($property['Key'] == 'PRI' || $property['Key'] == 'MUL') {
+	$setter .= "public function set".ucwords($property['Field'])."(\$".$property['Field'].") {
+		\$Config = new Config();
+		\$this->".$property['Field']." = \$Config->openCypher(\$".$property['Field'].", 'decrypt');
+	}\n\t";	
+}else{	
+	$setter .= "public function set".ucwords($property['Field'])."(\$".$property['Field'].") {
+		\$this->".$property['Field']." = \$".$property['Field'].";
 	}\n\t";
-	
-	$i++;
 }
 
+$i++;
+}
 
-$new_file = fopen($tabla.".php", "w+");
+$new_file = fopen(__ROOT__.'Entity/'.$tabla.".php", "w+");
 fwrite($new_file,"<?php
 
 namespace Entity;
 
 use Entity\Connect;
+use Config\Config;
 
 class ".$tabla." extends Connect {
 	// properties
@@ -109,8 +131,11 @@ class ".$tabla." extends Connect {
 
 	}
 }
-");
+	");
 
-fclose($new_file);
+	fclose($new_file);
+			echo "<h1>Tabla ".$tabla." fue creada con exito</h1>";		
+		}
+	}
+}
 
-echo "<h1>Archivo fue creado con exito</h1>";

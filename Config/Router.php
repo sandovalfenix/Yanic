@@ -15,8 +15,9 @@ class Router {
 			$class_controller = "Controllers\\" . $controller;
 			$rc = new \ReflectionClass($class_controller);			
 			$role = (strrpos($rc->getDocComment(), "@role")) ? explode(",", trim(str_replace(array('"', "*", "/", " ","@role"),"",$rc->getDocComment()))) : array(NULL);
-		    $check = (isset($_SESSION['ROLE']) && !in_array(NULL, $role)) ? in_array(strtoupper($_SESSION['ROLE']), $role) : in_array(NULL, $role);
 
+		    $check = (isset($_SESSION['ROLE']) && !in_array(NULL, $role)) ? in_array(strtoupper($_SESSION['ROLE']), $role) : in_array(NULL, $role);
+		    
 		    if ($check) {
 		    	$object = new $class_controller;
 		    	$method = (empty($request->getMethod())) ? 'home' : $request->getMethod();
@@ -33,10 +34,9 @@ class Router {
 				}
 				exit();		
 			}
+
+			$Config->render('/errors/error-404.twig');
 		}
-		$Config->render("errors/error-404.twig", array(
-			'session' => @$_SESSION['ROLE'],
-		));
 		
 		
 	}
