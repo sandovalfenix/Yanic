@@ -18,9 +18,8 @@ class Config{
 		
 		$this->twig = new \Twig_Environment($this->loader);
 		$this->assets = array('assets' => '/Templates/assets');
-		$this->twig->addGlobal('session', $_SESSION);
 		$filter = new \Twig_SimpleFilter('encrypt', function ($string){
-		    return $this->openCypher($string);
+		    return $this->encrypt($string);
 		});
 		$this->twig->addFilter($filter);
 	}
@@ -37,8 +36,8 @@ class Config{
 		    $mail->isSMTP();                               // Set mailer to use SMTP
 		    $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
 		    $mail->SMTPAuth = true;                               // Enable SMTP authentication
-		    $mail->Username = 'mailoceanycode@gmail.com';                 // SMTP username
-		    $mail->Password = 'Andres1234.';                           // SMTP password
+		    $mail->Username = '';                 // SMTP username
+		    $mail->Password = '';                           // SMTP password
 		    $mail->SMTPSecure = 'ssl';  
 		    $mail->SMTPOptions = array(
 			'ssl' => array(
@@ -49,15 +48,15 @@ class Config{
 			$mail->Port = 465;                                    // TCP port to connect to
 
 		    //Recipients
-		    $mail->setFrom($from, 'Seguridad Social Integral');
-		    $mail->addAddress($address, 'Cliente');          // Name is optional
+		    $mail->setFrom($from, '');
+		    $mail->addAddress($address, '');          // Name is optional
 
 		    //Content
 		    $mail->isHTML(true);                                  // Set email format to HTML
 		    $mail->Subject = $subject;
 		    $mail->Body    = $body;
 
-		    //$send = ($mail->send()) ? true : false;
+		    $send = ($mail->send()) ? true : false;
 		    $msj = null;
 		} catch (Exception $e) {
 			$msj = 'Error al regstrarce. Mailer Error: ' . $mail->ErrorInfo;
@@ -66,12 +65,12 @@ class Config{
 		return array('send' => true, 'msj' => $msj);
 	}
 
-	function openCypher ($string=false, $action='encrypt'){
+	function encrypt($string=false, $action='encrypt'){
 	    $action = trim($action);
 	    $output = false;
 
-	    $myKey = 'oW%c76+jb2';
-	    $myIV = 'A)2!u467a^';
+	    $myKey = 'yanic';
+	    $myIV = 'project00';
 	    $encrypt_method = 'AES-256-CBC';
 
 	    $secret_key = hash('sha256',$myKey);

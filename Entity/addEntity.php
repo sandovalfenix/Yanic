@@ -9,28 +9,28 @@ class addEntity extends Connect {
 		parent::__construct();
 	}
 
-	public function createTable($db){
+	public function createEntity($db){
 		
 		$Query = $this->prepare('SHOW FULL TABLES FROM '.$db);
 		$Query->execute();
 		$arrays = $Query->fetchAll($this::FETCH_ASSOC);
-foreach ($arrays as $array => $tables) {
+		foreach ($arrays as $array => $tables) {
 
-$tabla = ucwords($tables['Tables_in_'.$db]);
-$Query = $this->prepare('SHOW COLUMNS FROM '.$tabla);
-$Query->execute();
-$arrays = $Query->fetchAll($this::FETCH_ASSOC);
-$properties = array();
+		$tabla = ucwords($tables['Tables_in_'.$db]);
+		$Query = $this->prepare('SHOW COLUMNS FROM '.$tabla);
+		$Query->execute();
+		$arrays = $Query->fetchAll($this::FETCH_ASSOC);
+		$properties = array();
 
-$atributos = '';
-$attr = '';
-$setter = '';
-$values = '';
-$bindParam = '';
+		$atributos = '';
+		$attr = '';
+		$setter = '';
+		$values = '';
+		$bindParam = '';
 
-$i=0;
+		$i=0;
 foreach ($arrays as $array => $property) {
-$atributos .= "private \$".$property['Field'].";\n\t";
+
 if($property['Key'] == 'PRI'){ 
 	$idProperty = $property['Field'];
 }else{
@@ -39,14 +39,11 @@ if($property['Key'] == 'PRI'){
 	$bindParam .= "\$Query->bindParam(\":".$property['Field']."\", \$this->".$property['Field'].");\n\t\t";	
 }
 if ($property['Key'] == 'PRI' || $property['Key'] == 'MUL') {
+	$atributos .= "private \$".$property['Field'].";\n\t";
 	$setter .= "public function set".ucwords($property['Field'])."(\$".$property['Field'].") {
 		\$Config = new Config();
-		\$this->".$property['Field']." = \$Config->openCypher(\$".$property['Field'].", 'decrypt');
+		\$this->".$property['Field']." = \$Config->encrypt(\$".$property['Field'].", 'decrypt');
 	}\n\t";	
-}else{	
-	$setter .= "public function set".ucwords($property['Field'])."(\$".$property['Field'].") {
-		\$this->".$property['Field']." = \$".$property['Field'].";
-	}\n\t";
 }
 
 $i++;
@@ -72,63 +69,61 @@ class ".$tabla." extends Connect {
 	// setters para obtencion de datos
 	".$setter."
 	//metodos para CRUD database
-	public function save(){
+	public function create(\$data){
 		\$Query = \$this->prepare(\"INSERT INTO \".self::TABLA.\" (".$attr.") VALUES (".$values.")\");
 
-		".$bindParam."
-		return \$Query->execute();
+		\$Query->execute(\$data);
+		
+		return \$this->lastInsertId();
 	}
 
-	public function read(\$col='*', \$property = NULL, \$value = NULL){
+	public function read(\$col='*', \$property = NULL, \$value = NULL, \$limit='25'){
 		\$complement = (!empty(\$property) && !empty(\$value)) ? \"WHERE \".\$property.\" = \".\$value : '';
-		\$Query = \$this->prepare(\"SELECT \".\$col.\" FROM \".self::TABLA.\" \$complement ORDER BY ".$idProperty." DESC\");
+		
+		\$Query = \$this->prepare(\"SELECT \".\$col.\" FROM \".self::TABLA.\" \$complement ORDER BY ".$idProperty." LIMIT \".\$limit);
+
 		\$Query->execute();
 
-		return \$Query->fetchAll(\$this::FETCH_ASSOC);
-		
+		return \$Query->fetchAll(\$this::FETCH_ASSOC);		
 	}
 
-	public function update(\$property = NULL, \$value = NULL){
-
-	  	if(\$this->".$idProperty."){		    
-		    \$Query = \$this->prepare(\"UPDATE \".self::TABLA.\" SET \".\$property.\" = \".\$value.\" WHERE ".$idProperty." = :".$idProperty."\");
-
-		 	\$Query->bindParam(\":$idProperty\", \$this->".$idProperty.");
-	  	}
-
-	  	return \$Query->execute();
-	}
-
-	public function delete(){
-
-		if(\$this->".$idProperty."){			
-			\$Query = \$this->prepare(\"DELETE FROM \".self::TABLA.\" WHERE ".$idProperty." = :".$idProperty."\");
-			\$Query->bindParam(\":$idProperty\", \$this->".$idProperty.");
-	  	}
-	  	return \$Query->execute();
-	}
-
-	public function row(\$col =\"*\"){
-
-		if(\$this->".$idProperty."){			
-			\$Query = \$this->prepare(\"SELECT \".\$col.\" FROM \".self::TABLA.\" WHERE ".$idProperty." = :".$idProperty."\");
-			\$Query->bindParam(\":$idProperty\", \$this->".$idProperty.");
+	public function row(\$col='*', \$property = NULL, \$value = NULL){
+		if (\$this->".$idProperty.") {
+			\$complement = (!empty(\$property) && !empty(\$value)) ? \"WHERE ".$idProperty." = :".$idProperty." \"AND \".\$property.\" = \".\$value : '';
+		}else{
+			\$complement = (!empty(\$property) && !empty(\$value)) ? \"WHERE \".\$property.\" = \".\$value : '';
 		}
+
+		\$Query = \$this->prepare(\"SELECT \".\$col.\" FROM \".self::TABLA.\" \".\$complement);
+
+		\$Query->bindParam(\":$idProperty\", \$this->".$idProperty.");
+
 		\$Query->execute();
 		
-		return \$Query->fetch(\$this::FETCH_ASSOC);
-		
+		return \$Query->fetch(\$this::FETCH_ASSOC);		
 	}
 
-	public function search(\$search, \$word, \$col=\"*\"){
-		\$Query = \$this->prepare(\"SELECT \".\$col.\" FROM \".self::TABLA.\" WHERE \".\$search.\" LIKE %'\".\$word.\"'%\");
-		\$Query->execute();
-		
-		return \$Query->fetchAll(\$this::FETCH_ASSOC);
+	public function update(\$data){
+		\$property = \"\"; \$i=0;
+	  	foreach (\$data as \$name => \$value) {
+			if (\$i==0) {
+				\$property .=  str_replace(\":\", \"\", \$name).\" = \".\$name; 	
+			}else{
+				\$property .=  \", \".str_replace(\":\", \"\", \$name).\" = \".\$name;
+			}
+			\$i++;    	
+		}	    
+	    \$Query = \$this->prepare(\"UPDATE \".self::TABLA.\" SET \".\$property.\" WHERE ".$idProperty." = \".\$this->".$idProperty.");
+
+	  	return \$Query->execute(\$data);
 	}
 
-	public function __destruct(){
-
+	public function delete(){			
+		\$Query = \$this->prepare(\"DELETE FROM \".self::TABLA.\" WHERE ".$idProperty." = :".$idProperty."\");
+		
+		\$Query->bindParam(\":$idProperty\", \$this->".$idProperty.");
+	  	
+	  	return \$Query->execute();
 	}
 }
 	");
