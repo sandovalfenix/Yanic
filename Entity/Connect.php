@@ -6,7 +6,7 @@ use \PDOException;
 
 class Connect extends PDO { 
    private $type = 'mysql';
-   private $name = 'Archivo';
+   private $name = '';
    private $host = 'localhost';
    private $user = 'root';
    private $pass = '';

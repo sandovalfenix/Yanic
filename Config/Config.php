@@ -7,6 +7,9 @@ class Config{
 	private $loader;
 	private $twig;
 	private $assets = array();
+	private	$website = 'http://www.example.dev/';
+	private $framework = 'Yanic Framewor v2.6';
+	private $crypt_method = 'blowfish';
 
 	function __construct(){
 		$this->loader = new \Twig_Loader_Filesystem(
@@ -65,30 +68,44 @@ class Config{
 		return array('send' => true, 'msj' => $msj);
 	}
 
-	function encrypt($string=false, $action='encrypt'){
-	    $action = trim($action);
-	    $output = false;
+	public function encrypt($string){
+	    $output = false;	    
 
-	    $myKey = 'yanic';
-	    $myIV = 'project00';
-	    $encrypt_method = 'AES-256-CBC';
-
-	    $secret_key = hash('sha256',$myKey);
-	    $secret_iv = substr(hash('sha256',$myIV),0,16);
-
-	    if ( $action && ($action == 'encrypt' || $action == 'decrypt') && $string )
-	    {
-	        $string = trim(strval($string));
-
-	        if ( $action == 'encrypt' ){
-	            $output = base64_encode(openssl_encrypt($string, $encrypt_method, $secret_key, 0, $secret_iv));
-	        };
-
-	        if ( $action == 'decrypt' ){
-	            $output = openssl_decrypt(base64_decode($string), $encrypt_method, $secret_key, 0, $secret_iv);
-	        };
-	    };
+	    $secret_key = hash('sha256',$this->website);
+	    $secret_iv = substr(hash('sha256',$this->framework),0,8);
+	    $string = trim(strval($string));
+	    $output = base64_encode(openssl_encrypt($string, $this->crypt_method, $secret_key, 0, $secret_iv));
 
 	    return $output;
+	}
+
+	public function decrypt($string){
+	    $output = false;
+
+	    $secret_key = hash('sha256',$this->website);
+	    $secret_iv = substr(hash('sha256',$this->framework),0,8);
+	    $string = trim(strval($string));
+	    $output = openssl_decrypt(base64_decode($string), $this->crypt_method, $secret_key, 0, $secret_iv);
+
+	    return $output;
+	}
+
+	public function setAlert($type, $msj){
+		$_SESSION['alert'] = array(
+			'type' => $type,
+			'msj' => $msj
+		);
+	}
+
+	public function getAlert(){
+		$alert = (isset($_SESSION['alert'])) ? $_SESSION['alert'] : false ;
+		$_SESSION['alert'] = false;
+		
+		return $alert;
+	}
+
+	public function redirect($url){
+		header("location: ".$url); 
+		exit();
 	}
 }

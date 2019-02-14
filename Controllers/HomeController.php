@@ -3,12 +3,11 @@
 namespace Controllers;
 
 use Config\Config;
-use Entity\addEntity;
 
 /**
  * @start "Homepage"
  */
-class DefaultController extends Config {
+class HomeController extends Config {
 
 	public function home() {
 		$this->render('home/index.twig');

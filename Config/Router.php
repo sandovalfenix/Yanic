@@ -6,10 +6,10 @@ use Config\Config;
 class Router {
 	
 	public function __construct(Request $request) {
-		
 		$Config = new Config;
 		
-		$controller = (empty($request->getController())) ? $this->start_home(__ROOT__ . 'Controllers') : $request->getController();		
+		$controller = (empty($request->getController())) ? $this->start_home(__ROOT__ . 'Controllers') : $request->getController();	
+
 		if(file_exists(__ROOT__ . 'Controllers' . __DS__ . $controller .".php")){
 
 			$class_controller = "Controllers\\" . $controller;
@@ -32,20 +32,17 @@ class Router {
 					    $data = (empty($request->getArgument())) ? call_user_func(array($object, $method)) : call_user_func_array(array($object, $method), explode('$', $request->getArgument()));
 					}
 				}
+				
 				exit();		
 			}
-
 			$Config->render('/errors/error-404.twig');
-		}
-		
-		
+		}		
 	}
 
 	public function start_home($carpeta){
 		$start_home = false;
-
 	    if(is_dir($carpeta)){
-	        if($dir = opendir($carpeta)){
+	        if($dir = opendir($carpeta)){	        		
 	            while(($archivo = readdir($dir)) !== false && $start_home == false){
 	                if($archivo != '.' && $archivo != '..' && $archivo != '.htaccess'){
 	                	$rc = new \ReflectionClass("Controllers\\". str_replace(".php", "", $archivo));

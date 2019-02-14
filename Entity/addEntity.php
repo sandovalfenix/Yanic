@@ -9,48 +9,49 @@ class addEntity extends Connect {
 		parent::__construct();
 	}
 
-	public function createEntity($db){
+	public function createEntity(){
 		
-		$Query = $this->prepare('SHOW FULL TABLES FROM '.$db);
+		$Query = $this->prepare('SHOW TABLES');
 		$Query->execute();
 		$arrays = $Query->fetchAll($this::FETCH_ASSOC);
 		foreach ($arrays as $array => $tables) {
+			foreach ($tables as $key => $value) {
+				$tabla = ucwords($value);
+				$Query = $this->prepare('SHOW COLUMNS FROM '.$tabla);
+				$Query->execute();
+				$arrays = $Query->fetchAll($this::FETCH_ASSOC);
 
-		$tabla = ucwords($tables['Tables_in_'.$db]);
-		$Query = $this->prepare('SHOW COLUMNS FROM '.$tabla);
-		$Query->execute();
-		$arrays = $Query->fetchAll($this::FETCH_ASSOC);
-		$properties = array();
+				$atributos = '';
+				$attr = '';
+				$setter = '';
+				$values = '';
+				$bindParam = '';
 
-		$atributos = '';
-		$attr = '';
-		$setter = '';
-		$values = '';
-		$bindParam = '';
+				$i = 0;
+				foreach ($arrays as $array => $property) {
 
-		$i=0;
-foreach ($arrays as $array => $property) {
-
-if($property['Key'] == 'PRI'){ 
-	$idProperty = $property['Field'];
-}else{
-	$attr .= ($i == 1) ? $property['Field'] : ", ".$property['Field'];
-	$values .= ($i == 1) ? ":".$property['Field'] : ", :".$property['Field'];
-	$bindParam .= "\$Query->bindParam(\":".$property['Field']."\", \$this->".$property['Field'].");\n\t\t";	
-}
-if ($property['Key'] == 'PRI' || $property['Key'] == 'MUL') {
-	$atributos .= "private \$".$property['Field'].";\n\t";
-	$setter .= "public function set".ucwords($property['Field'])."(\$".$property['Field'].") {
+					if($property['Key'] == 'PRI'){ 
+						$idProperty = $property['Field'];
+					}else{
+						$attr .= ($i == 1) ? $property['Field'] : ", ".$property['Field'];
+						$values .= ($i == 1) ? ":".$property['Field'] : ", :".$property['Field'];
+						$bindParam .= "\$Query->bindParam(\":".$property['Field']."\", \$this->".$property['Field'].");\n\t\t";	
+					}
+					if ($property['Key'] == 'PRI' || $property['Key'] == 'MUL') {
+						$atributos .= "private \$".$property['Field'].";\n\t";
+						$setter .= "public function set".ucwords($property['Field'])."(\$".$property['Field'].") {
 		\$Config = new Config();
-		\$this->".$property['Field']." = \$Config->encrypt(\$".$property['Field'].", 'decrypt');
+		
+		\$this->".$property['Field']." = \$Config->decrypt(\$".$property['Field'].");
+
+		return \$this;
 	}\n\t";	
-}
+					}
+					$i++;
+				}
 
-$i++;
-}
-
-$new_file = fopen(__ROOT__.'Entity/'.$tabla.".php", "w+");
-fwrite($new_file,"<?php
+				$new_file = fopen(__ROOT__.'Entity/'.$tabla.".php", "w+");
+				fwrite($new_file,"<?php
 
 namespace Entity;
 
@@ -89,7 +90,7 @@ class ".$tabla." extends Connect {
 
 	public function row(\$col='*', \$property = NULL, \$value = NULL){
 		if (\$this->".$idProperty.") {
-			\$complement = (!empty(\$property) && !empty(\$value)) ? \"WHERE ".$idProperty." = :".$idProperty." \"AND \".\$property.\" = \".\$value : '';
+			\$complement = (!empty(\$property) && !empty(\$value)) ? \"WHERE ".$idProperty." = :".$idProperty." AND \".\$property.\" = \".\$value : '';
 		}else{
 			\$complement = (!empty(\$property) && !empty(\$value)) ? \"WHERE \".\$property.\" = \".\$value : '';
 		}
@@ -125,11 +126,11 @@ class ".$tabla." extends Connect {
 	  	
 	  	return \$Query->execute();
 	}
-}
-	");
+}");
 
-	fclose($new_file);
-			echo "<h1>Tabla ".$tabla." fue creada con exito</h1>";		
+				fclose($new_file);
+				echo "<h1>Tabla ".$tabla." fue creada con exito</h1>";		
+			}
 		}
 	}
 }
