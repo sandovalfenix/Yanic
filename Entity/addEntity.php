@@ -14,6 +14,11 @@ class addEntity extends Connect {
 		$Query = $this->prepare('SHOW TABLES');
 		$Query->execute();
 		$arrays = $Query->fetchAll($this::FETCH_ASSOC);
+
+		$this->createTable($arrays);
+	}
+
+	public public function createTable($arrays){
 		foreach ($arrays as $array => $tables) {
 			foreach ($tables as $key => $value) {
 				$tabla = ucwords($value);
@@ -90,7 +95,7 @@ class ".$tabla." extends Connect {
 
 	public function row(\$col='*', \$property = NULL, \$value = NULL){
 		if (\$this->".$idProperty.") {
-			\$complement = (!empty(\$property) && !empty(\$value)) ? \"WHERE ".$idProperty." = :".$idProperty." AND \".\$property.\" = \".\$value : '';
+			\$complement = (!empty(\$property) && !empty(\$value)) ? \"WHERE ".$idProperty." = :".$idProperty." AND \".\$property.\" = \".\$value : \"WHERE ".$idProperty." = :".$idProperty."\";
 		}else{
 			\$complement = (!empty(\$property) && !empty(\$value)) ? \"WHERE \".\$property.\" = \".\$value : '';
 		}

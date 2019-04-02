@@ -21,6 +21,7 @@ class Config{
 		
 		$this->twig = new \Twig_Environment($this->loader);
 		$this->assets = array('assets' => '/Templates/assets');
+		$this->twig->addGlobal('Session', $_SESSION);
 		$filter = new \Twig_SimpleFilter('encrypt', function ($string){
 		    return $this->encrypt($string);
 		});
@@ -60,12 +61,12 @@ class Config{
 		    $mail->Body    = $body;
 
 		    $send = ($mail->send()) ? true : false;
-		    $msj = null;
+		    $msj = 'Mensaje registrado exitosamente';
 		} catch (Exception $e) {
 			$msj = 'Error al regstrarce. Mailer Error: ' . $mail->ErrorInfo;
 		}
 
-		return array('send' => true, 'msj' => $msj);
+		return array('send' => $send, 'msj' => $msj);
 	}
 
 	public function encrypt($string){

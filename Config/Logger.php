@@ -16,7 +16,7 @@ class Logger {
 	}
 
 	public function url(){
-		return (!isset($_SERVER["SCRIPT_URL"])) ? "/home" : $_SERVER["SCRIPT_URL"];
+		return (!isset($_SERVER["SCRIPT_URL"])) ? "/" : $_SERVER["SCRIPT_URL"];
 	} 
 	
 	public function setLogViews() {
