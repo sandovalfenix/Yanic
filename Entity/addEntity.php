@@ -18,7 +18,7 @@ class addEntity extends Connect {
 		$this->createTable($arrays);
 	}
 
-	public public function createTable($arrays){
+	public function createTable($arrays){
 		foreach ($arrays as $array => $tables) {
 			foreach ($tables as $key => $value) {
 				$tabla = ucwords($value);
