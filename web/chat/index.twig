@@ -1,45 +1,6 @@
 
 
 {% extends 'layout/default_layout.twig' %}
-
-{% block container %}
-  <head>
-    <title>Chat, Private chat 8</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" href="Config/CDN/FONT-AWESOME/css/all.css">
-    <link rel="stylesheet" type="text/css" href="Config/CDN/BOOTSTRAP4/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="Source/Design/CSS/mov.css">
-  </head>
-  <body>
-    <div id="app" class="container-fluid">
-      <!--<form action="" method="post">-->
-      <div class="row">
-        <div class="input-group mb-3 mt-3 ml-3">
-          <div class="text-light ml-3 text-white ts-20">
-            <i class="fal fa-play-circle"></i>&nbsp;CHAT</div>
-        </div>
-      </div>
-      <!--TEXT AREA-->
-      <div v-if="Msn.length > 0" class="row" >
-        <div v-for="Msn in Msns" class="input-group mb-3 mt-3" >
-          <div class="prl"></div>
-          <div class="text-light m-0 text-white ts-20 prn">
-            ([Msn.text])
-          </div>
-          <div class="prr"></div>
-        </div>
-      </div>
-      <div class="input-group mb-3" style="position:fixed; bottom:0; width:98%;">
-        <div class="input-group-prepend">
-          <span class="input-group-text prl"><span class="fal fa-lock-alt pl-1"></span></span>
-        </div>
-        <input name="msg" type="text" class="input prn" placeholder="Envia un mensaje..." aria-label="Sendtext" v-model="Msn.text" required>
-        <button v-if="Msn.id" type="button" class="input-group-text prr op-password" @click="Msn = []"><span class="fal fa-close mr-1" ></span></button>
-        <button v-else="Msn.id" type="button" class="input-group-text prr op-password"  @click="create"><span class="fal fa-play mr-1" ></span></button>
-      </div>
-          <!--</form>-->
-    </div>
-  {% endblock %}
   {% block script %}
 
     <!--APP-->
@@ -123,5 +84,36 @@
       /*var a = location.pathname.substring(1).split("/");
       console.log(a);*/
     </script>
+  {% endblock %}
+{% block container %}
+    <div id="app" class="container-fluid">
+      <!--<form action="" method="post">-->
+      <div class="row">
+        <div class="input-group mb-3 mt-3 ml-3">
+          <div class="text-light ml-3 text-white ts-20">
+            <i class="fal fa-play-circle"></i>&nbsp;CHAT</div>
+        </div>
+      </div>
+      <div v-if="Msns.length > 0">
+        <div v-for="Msn in Msns" class="row text-light m-0 text-white ts-15 mb-1 mt-1 ml-3">
+          <div class="col">
+            <button v-if="Msn.id" type="button" class="btn btn-outline-danger"  @click="deleted"><span class="fal fa-trash mr-1" ></span></button>
+          </div>
+          <div class="col-10">
+            ([Msn.text])
+          </div>
+        </div>
+      </div>
+      <p v-else="Msns.length === 0" class="text-center text-danger">No hay registros disponibles</p>
+      <div class="input-group mb-3" style="position:fixed; bottom:0; width:98%;">
+        <div class="input-group-prepend">
+          <span class="input-group-text prl"><span class="fal fa-lock-alt pl-1"></span></span>
+        </div>
+        <input type="text" class="input prn" placeholder="Envia un mensaje..." v-model="Msn.text" required>
+        <button v-if="Msn.id" type="button" class="input-group-text prr op-password" @click="Msn = []"><span class="fal fa-close" ></span></button>
+        <button v-else="Msn.id" type="button" class="input-group-text prr op-password"  @click="create"><span class="fal fa-play" ></span></button>
+      </div>
+          <!--</form>-->
+    </div>
   {% endblock %}
  
