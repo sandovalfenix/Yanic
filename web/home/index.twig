@@ -1,0 +1,46 @@
+{% extends 'layout/default_layout.twig' %}
+
+{% block script %}
+<script src="/src/appUser.js"></script>
+{% endblock %}
+
+{% block container %}
+<div id="app" class="container">
+    <div class="col">
+        <h4 class="text-center mt-3">Registro de Usuario</h4>
+        <div class="row">
+            <div class="col text-center">
+                <h1 class="display-3 text-warning"><i class="fa fa-user-circle"></i>&nbsp;	</h1>
+            </div>
+        </div>
+        <input type="text" class="form-control mb-3" placeholder="Usuario" v-model="User.username" required>
+        <input type="email" class="form-control mb-3" v-model="User.email" placeholder="Correo" required>
+
+        <button v-if="User.id" type="submit" class="btn btn-warning btn-block" @click="update(User.id)"><i class="fa fa-edit" aria-hidden="true"></i> Actualizar</button>
+        <button v-if="User.id" type="submit" class="btn btn-secondary btn-block" @click="User = []">Cancelar</button>
+        <button v-else="User.id" type="submit" class="btn btn-info btn-block" @click="create"><i class="fa fa-check-circle" aria-hidden="true"></i> Guardar</button>
+    </div>
+    <hr>
+    <div class="container">
+        <h4 class="text-center my-3">Usuarios Registrados</h4>
+        <table v-if="Users.length > 0" class="table table-sm table-dark table-hover">
+            <thead>
+              <tr class="text-center">
+                <th scope="col"><i class="fa fa-user" aria-hidden="true"></i> Usuario</th>
+                <th scope="col"><i class="fas fa-mail-bulk"></i> Correo</th>
+                <th scope="col"><i class="fas fa-user-edit"></i> Accion</th>
+              </tr>
+            </thead>
+            <tbody v-for="User in Users">
+              <tr class="text-center">
+                <td>([User.username])</td>
+                <td>([User.email])</td>
+                <td><a href="#" class="btn btn-danger btn-sm" @click="deleted(User.id)"><i class="fa fa-trash" aria-hidden="true"></i></a> | <a href="#" class="btn btn-warning btn-sm" @click="edit(User.id)"><i class="fa fa-edit" aria-hidden="true"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p v-else="Users.length === 0" class="text-center text-danger">No hay registros disponibles</p>
+    </div>
+</div>
+{% endblock %}
