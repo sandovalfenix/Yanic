@@ -18,10 +18,18 @@
           data:{
               Msns: [],
               Msn: [],
+              Oip: [],
+          },
+          created: function() {
+                this.ip();
           },
           methods: {
               create(){
+                  this.Msn.date = new Date();
+                  this.Msn.hour = new Date().getTime();
+                  this.Msn.ip = this.Oip;
                   var Msn = Object.assign({},this.Msn);
+                  console.log(this.Msn);
                   db.collection("Msns").add(Msn)
                   .then(function (docRef) {
                       console.log("Registro añadido con ID: ", docRef.id);
@@ -66,19 +74,24 @@
                   }).catch(function(error) {
                       console.log("Error al actualizar documento:", error);
                   });
+              },
+              ip(){
+                $.getJSON('http://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
+                  app._data.Oip = data.geoplugin_request;
+                });
               }
-          },
+            },
           delimiters: ['([', '])'],
       });
 
-      db.collection("Msns").orderBy('text').onSnapshot(function(querySnapshot) {
+      db.collection("Msns").orderBy('date').onSnapshot(function(querySnapshot) {
           app._data.Msns = [];
           querySnapshot.forEach(function(doc) {
               // doc.data() is never undefined for query doc snapshots
               var data = doc.data();
               data.id = doc.id;
               app._data.Msns.push(data);
-          });        
+          });     
       });
 
       /*var a = location.pathname.substring(1).split("/");
@@ -95,17 +108,27 @@
         </div>
       </div>
       <div v-if="Msns.length > 0">
-        <div v-for="Msn in Msns" class="row text-light m-0 text-white ts-15 mb-1 mt-1 ml-3">
-          <div class="col">
-            <button v-if="Msn.id" type="button" class="btn btn-outline-danger"  @click="deleted"><span class="fal fa-trash mr-1" ></span></button>
+        <div v-for="Msn in Msns">
+          <div class="row text-light m-0 text-white ts-15 mb-1 mt-1 ml-1" v-if="Msn.ip == '191.111.173.143'"> 
+            <div class="col-1">
+              <a v-if="Msn.id" class="btn-none"  @click="deleted(Msn.id)"><span class="fal fa-trash" ></span></a>
+            </div>
+            <div class="col-6">
+              ([Msn.text])
+            </div>
+            <div class="col-4">
+              <small>([Msn.hour])</small>
+            </div>
           </div>
-          <div class="col-10">
-            ([Msn.text])
+          <div class="row text-light m-0 text-white ts-15 mb-1 mt-1 ml-3" v-else>
+            <div class="col-12 text-right">
+              ([Msn.text])
+            </div>
           </div>
         </div>
       </div>
       <p v-else="Msns.length === 0" class="text-center text-danger">No hay registros disponibles</p>
-      <div class="input-group mb-3" style="position:fixed; bottom:0; width:98%;">
+      <div class="input-group mb-3" style="position:fixed; bottom:0; width:95%;">
         <div class="input-group-prepend">
           <span class="input-group-text prl"><span class="fal fa-lock-alt pl-1"></span></span>
         </div>
