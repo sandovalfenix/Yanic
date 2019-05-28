@@ -16,6 +16,10 @@
 
     //JQUERY KEYS
     $(document).ready(function(){
+      $('html, body').animate({
+       scrollTop: $(document).height()
+        }, 'slow');
+        return false;
       $(".input").keypress(function(e) {
         var code = (e.keyCode ? e.keyCode : e.which);
         if(code==13){
@@ -43,6 +47,10 @@
                 console.log(this.Msn);
                 db.collection("Msns").add(Msn)
                 .then(function (docRef) {
+                  $('html, body').animate({
+                       scrollTop: $(document).height()
+                    }, 'slow');
+                    return false;
                     console.log("Registro añadido con ID: ", docRef.id);
                 })
                 .catch(function (error) {
