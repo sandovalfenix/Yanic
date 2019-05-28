@@ -105,6 +105,25 @@ a:hover {
 	font-size: 10px;
 }
 
+/*CHAT*/
+.chat-bubble {
+	background-color: #7e28dc;
+    border-radius: 6px;
+    padding-left: 10px;
+    padding-bottom: 4px;
+    padding-top: 2px;
+}
+
+.chat-bubble-enter {
+	background-color: #fff;
+    border-radius: 6px;
+    padding-right: 10px;
+    padding-bottom: 4px;
+    padding-top: 2px;
+    color:#000;
+}
+    
+
 /*REPRO*/
 .alert-repro {
 	background: #000; 

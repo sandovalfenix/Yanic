@@ -108,7 +108,7 @@
 {% endblock %}
 {% block container %}
   <div id="app">
-    <div class="container-fluid">
+    <div class="container-fluid" style="margin-bottom:6rem!important;">
       <div class="row">
         <div class="input-group mb-3 mt-3 ml-3">
           <div class="text-light ml-3 text-white ts-20">
@@ -117,20 +117,17 @@
       </div>
       <div v-if="Msns.length > 0">
         <div v-for="Msn in Msns">
-          <div class="row text-light m-0 text-white ts-15 mb-1 mt-1 ml-1" v-if="Msn.ip == '191.111.173.143'"> 
-            <div class="col-1">
+          <div class="row text-light text-white ts-15 mb-1 mt-1 ml-1" v-if="Msn.ip == '191.111.173.143'"> 
+            <div class="col-1 ">
               <a v-if="Msn.id" class="btn-none"  @click="deleted(Msn.id)"><span class="fal fa-trash" ></span></a>
             </div>
-            <div class="col-10">
-              ([Msn.text])
+            <div class="col-10 ml-1 float-left p-0">
+              <div class="chat-bubble">([Msn.text])</div>
             </div>
-            {#<div class="col-4">
-              <small>([Msn.hour])</small>
-            </div>#}
           </div>
-          <div class="row text-light m-0 text-white ts-15 mb-1 mt-1 ml-3" v-else>
-            <div class="col-12 text-right">
-              ([Msn.text])
+          <div class="row text-white ts-15 mb-1 mt-1 ml-3" v-else>
+            <div class="col-12 float-right ">
+              <div class="chat-bubble-enter text-right ">([Msn.text])</div>
             </div>
           </div>
         </div>
