@@ -1,106 +1,114 @@
 
 
 {% extends 'layout/default_layout.twig' %}
-  {% block script %}
+{% block script %}
+  <!--APP-->
+  <script>
 
-    <!--APP-->
-    <script>
-      firebase.initializeApp({
-        apiKey: 'AIzaSyCQmMBRu8LqK9U5fv9jPmLgLruHNm92qpQ',
-        authDomain: 'yanic-25102.firebaseapp.com',
-        projectId: 'yanic-25102'
+    firebase.initializeApp({
+      apiKey: 'AIzaSyCQmMBRu8LqK9U5fv9jPmLgLruHNm92qpQ',
+      authDomain: 'yanic-25102.firebaseapp.com',
+      projectId: 'yanic-25102'
+    });
+
+    // Initialize Cloud Firestore through Firebase
+    var db = firebase.firestore();
+
+    //JQUERY KEYS
+    $(document).ready(function(){
+      $(".input").keypress(function(e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if(code==13){
+          app.create();
+        }
       });
+    });
 
-      // Initialize Cloud Firestore through Firebase
-      var db = firebase.firestore();
-      const app = new Vue({
-          el: "#app",
-          data:{
-              Msns: [],
-              Msn: [],
-              Oip: [],
-          },
-          created: function() {
-                this.ip();
-          },
-          methods: {
-              create(){
-                  this.Msn.date = new Date();
-                  this.Msn.hour = new Date().getTime();
-                  this.Msn.ip = this.Oip;
-                  var Msn = Object.assign({},this.Msn);
-                  console.log(this.Msn);
-                  db.collection("Msns").add(Msn)
-                  .then(function (docRef) {
-                      console.log("Registro añadido con ID: ", docRef.id);
-                  })
-                  .catch(function (error) {
-                      console.error("Error al agregar registro: ", error);
-                  });                
-                  this.Msn = []; 
-              },
-              home(id){
-                  var docRef = db.collection("Msns").doc(id);
-                  this.Msn = [];
-                  docRef.get().then(function(doc) {
-                      if (doc.exists) {
-                          console.log("Document data:", doc.data());
-                          var data = doc.data();
-                          data.id = id;
-                          app._data.Msn = data;
-                      } else {
-                          // doc.data() will be undefined in this case
-                          console.log("No such document!");
-                      }
-                  }).catch(function(error) {
-                      console.log("Error getting document:", error);
-                  });
-              },            
-              deleted(id){
-                  db.collection("Msns").doc(id).delete().then(function() {
-                      console.log("Document successfully deleted!");
-                  }).catch(function(error) {
-                      console.error("Error removing document: ", error);
-                  });
-              },
-              edit(id){
-                  this.home(id);
-              },
-              update(id){                
-                  var docRef = db.collection("Msns").doc(id).update(this.Msn)
-                  .then(function() {
-                      console.log("Actualizacion Completada");
-                      app._data.Msn = [];
-                  }).catch(function(error) {
-                      console.log("Error al actualizar documento:", error);
-                  });
-              },
-              ip(){
-                $.getJSON('http://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
-                  app._data.Oip = data.geoplugin_request;
-                });
-              }
+    const app = new Vue({
+        el: "#app",
+        data:{
+            Msns: [],
+            Msn: [],
+            Oip: [],
+        },
+        created: function() {
+          this.ip();
+        },
+        methods: {
+            create(){
+                this.Msn.date = new Date();
+                this.Msn.hour = new Date().getTime();
+                this.Msn.ip = this.Oip;
+                var Msn = Object.assign({},this.Msn);
+                console.log(this.Msn);
+                db.collection("Msns").add(Msn)
+                .then(function (docRef) {
+                    console.log("Registro añadido con ID: ", docRef.id);
+                })
+                .catch(function (error) {
+                    console.error("Error al agregar registro: ", error);
+                });                
+                this.Msn = []; 
             },
-          delimiters: ['([', '])'],
-      });
+            home(id){
+                var docRef = db.collection("Msns").doc(id);
+                this.Msn = [];
+                docRef.get().then(function(doc) {
+                    if (doc.exists) {
+                        console.log("Document data:", doc.data());
+                        var data = doc.data();
+                        data.id = id;
+                        app._data.Msn = data;
+                    } else {
+                        // doc.data() will be undefined in this case
+                        console.log("No such document!");
+                    }
+                }).catch(function(error) {
+                    console.log("Error getting document:", error);
+                });
+            },            
+            deleted(id){
+                db.collection("Msns").doc(id).delete().then(function() {
+                    console.log("Document successfully deleted!");
+                }).catch(function(error) {
+                    console.error("Error removing document: ", error);
+                });
+            },
+            edit(id){
+                this.home(id);
+            },
+            update(id){                
+                var docRef = db.collection("Msns").doc(id).update(this.Msn)
+                .then(function() {
+                    console.log("Actualizacion Completada");
+                    app._data.Msn = [];
+                }).catch(function(error) {
+                    console.log("Error al actualizar documento:", error);
+                });
+            },
+            ip(){
+              $.getJSON('http://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
+                app._data.Oip = data.geoplugin_request;
+              });
+            }
+          },
+        delimiters: ['([', '])'],
+    });
 
-      db.collection("Msns").orderBy('date').onSnapshot(function(querySnapshot) {
-          app._data.Msns = [];
-          querySnapshot.forEach(function(doc) {
-              // doc.data() is never undefined for query doc snapshots
-              var data = doc.data();
-              data.id = doc.id;
-              app._data.Msns.push(data);
-          });     
-      });
-
-      /*var a = location.pathname.substring(1).split("/");
-      console.log(a);*/
-    </script>
-  {% endblock %}
+    db.collection("Msns").orderBy('date').onSnapshot(function(querySnapshot) {
+        app._data.Msns = [];
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            var data = doc.data();
+            data.id = doc.id;
+            app._data.Msns.push(data);
+        });     
+    });
+  </script>
+{% endblock %}
 {% block container %}
-    <div id="app" class="container-fluid">
-      <!--<form action="" method="post">-->
+  <div id="app">
+    <div class="container-fluid">
       <div class="row">
         <div class="input-group mb-3 mt-3 ml-3">
           <div class="text-light ml-3 text-white ts-20">
@@ -113,12 +121,12 @@
             <div class="col-1">
               <a v-if="Msn.id" class="btn-none"  @click="deleted(Msn.id)"><span class="fal fa-trash" ></span></a>
             </div>
-            <div class="col-6">
+            <div class="col-10">
               ([Msn.text])
             </div>
-            <div class="col-4">
+            {#<div class="col-4">
               <small>([Msn.hour])</small>
-            </div>
+            </div>#}
           </div>
           <div class="row text-light m-0 text-white ts-15 mb-1 mt-1 ml-3" v-else>
             <div class="col-12 text-right">
@@ -128,15 +136,19 @@
         </div>
       </div>
       <p v-else="Msns.length === 0" class="text-center text-danger">No hay registros disponibles</p>
-      <div class="input-group mb-3" style="position:fixed; bottom:0; width:95%;">
-        <div class="input-group-prepend">
-          <span class="input-group-text prl"><span class="fal fa-lock-alt pl-1"></span></span>
-        </div>
-        <input type="text" class="input prn" placeholder="Envia un mensaje..." v-model="Msn.text" required>
-        <button v-if="Msn.id" type="button" class="input-group-text prr op-password" @click="Msn = []"><span class="fal fa-close" ></span></button>
-        <button v-else="Msn.id" type="button" class="input-group-text prr op-password"  @click="create"><span class="fal fa-play" ></span></button>
-      </div>
-          <!--</form>-->
     </div>
+    <div class="input-group mb-3 p-2" style="position:fixed; bottom:0;">
+      <div class="input-group-prepend">
+        <span class="input-group-text prl"><span class="fal fa-lock-alt pl-1"></span></span>
+      </div>
+      <input type="text" class="input prn" placeholder="Envia un mensaje..." v-model="Msn.text" required>
+      <button v-if="Msn.id" type="button" class="input-group-text prr op-password" @click="Msn = []">
+        <span class="fal fa-close" ></span>
+      </button>
+      <button v-else="Msn.id" type="button" class="input-group-text prr op-send" @click="create">
+        <span class="fal fa-play"></span>
+      </button>
+    </div>
+</div>
   {% endblock %}
  
