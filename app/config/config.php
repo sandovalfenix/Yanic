@@ -12,7 +12,7 @@ class Config{
 	private $crypt_method = 'blowfish';
 
 	function __construct(){
-		$this->loader = new \Twig_Loader_Filesystem(
+		$this->loader = new \Twig\Loader\FilesystemLoader(
 			array (
 			   __ROOT__ . "web",
 			   __ROOT__ . "app\config\Resources",
@@ -21,6 +21,7 @@ class Config{
 		);
 		
 		$this->twig = new \Twig_Environment($this->loader);
+		
 		$this->twig->addGlobal('Session', $_SESSION);
 		$filter = new \Twig_SimpleFilter('encrypt', function ($string){
 		    return $this->encrypt($string);
