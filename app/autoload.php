@@ -1,13 +1,13 @@
 <?php 
 
-namespace App;
+namespace app;
 
 class Autoload {
 	public static function run() {	
 		spl_autoload_register(function($class){	
 			
 			$path_file = str_replace("\\", "/", $class).".php";
-			
+
 			if (file_exists($path_file)) {
 				include_once($path_file);
 			}else{

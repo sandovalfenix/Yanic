@@ -1,14 +1,15 @@
 <?php 
-namespace App\Config;
+namespace app\config;
 
-use App\Config\Config;
+use app\config\Config;
 
 class Router extends Config{
 	
 	public function __construct(Request $request) {
+		
 		parent::__construct();
 		$path =__ROOT__."/web/";
-		
+
 		if (file_exists($path.$request->getRender().".twig")) {
 			$this->render($request->getRender().".twig");
 		}elseif(file_exists($path.$request->getRender()."/index.twig")) {

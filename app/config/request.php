@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Config;
+namespace app\config;
 
 class Request {
 	

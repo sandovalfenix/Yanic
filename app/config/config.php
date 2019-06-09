@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Config;
+namespace app\config;
 
 class Config{
 	
@@ -15,11 +15,10 @@ class Config{
 		$this->loader = new \Twig\Loader\FilesystemLoader(
 			array (
 			   __ROOT__ . "web",
-			   __ROOT__ . "app\config\Resources",
-			   __ROOT__ . "app\config\Resources" . __DS__ . "layout",
+			   __ROOT__ . "app/config/Resources",
+			   __ROOT__ . "app/config/Resources/layout",
 			)
 		);
-		
 		$this->twig = new \Twig_Environment($this->loader);
 		
 		$this->twig->addGlobal('Session', $_SESSION);
