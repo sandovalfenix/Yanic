@@ -1,22 +1,94 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}{% endblock %}</title>
-    
-    {% block cssPlugins %}{% endblock %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!-- Firebase aitheria -->
-    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-firestore.js"></script>
+  <title>{% block title %}{% endblock %}</title>
 
-    <!-- CSS aitheria -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <link rel="shortcut icon" href="{{assets}}/img/yanic.ico">
+
+  <!--Fonts Google-->
+  <link href="//fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Amaranth:300,400,500,600,700" rel="stylesheet">
+
+  <!-- CSS Implementing Plugins -->
+  <link rel="stylesheet" href="{{assets}}/vendor/font-awesome/css/fontawesome-all.min.css">
+  <link rel="stylesheet" href="{{assets}}/vendor/custombox/dist/custombox.min.css">
+  <link rel="stylesheet" href="{{assets}}/vendor/animate.css/animate.min.css">
+  <link rel="stylesheet" href="{{assets}}/vendor/hs-megamenu/src/hs.megamenu.css">
+  <link rel="stylesheet" href="{{assets}}/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
+  <link rel="stylesheet" href="{{assets}}/vendor/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="{{assets}}/vendor/fancybox/jquery.fancybox.css">
+  <link rel="stylesheet" href="{{assets}}/vendor/slick-carousel/slick/slick.css">
+
+  <!-- CSS Front Template -->
+  <link rel="stylesheet" href="{{assets}}/css/theme.css">
+  {% block cssPlugins %}{% endblock %}
+
+  <!-- Firebase aitheria -->
+  <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-firestore.js"></script>
+  <!-- vuejs aitheria -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
 </head>
 <body>
-    {% block container %}{% endblock %}
-    {% block appScript %}{% endblock %}
+  {% block container %}{% endblock %}
+
+  <!-- Go to Top -->
+  <a class="js-go-to u-go-to" href="#"
+    data-position='{"bottom": 15, "right": 15 }'
+    data-type="fixed"
+    data-offset-top="400"
+    data-compensation="#header"
+    data-show-effect="slideInUp"
+    data-hide-effect="slideOutDown">
+    <span class="fas fa-arrow-up u-go-to__inner"></span>
+  </a>
+  <!-- End Go to Top -->
+
+    <!-- JS Global Compulsory -->
+  <script src="{{assets}}/vendor/jquery/dist/jquery.min.js"></script>
+  <script src="{{assets}}/vendor/jquery-migrate/dist/jquery-migrate.min.js"></script>
+  <script src="{{assets}}/vendor/popper.js/dist/umd/popper.min.js"></script>
+  <script src="{{assets}}/vendor/bootstrap/bootstrap.min.js"></script>
+
+  <!-- JS Implementing Plugins -->
+  <script src="{{assets}}/vendor/hs-megamenu/src/hs.megamenu.js"></script>
+  <script src="{{assets}}/vendor/svg-injector/dist/svg-injector.min.js"></script>
+  <script src="{{assets}}/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+  <script src="{{assets}}/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+  <script src="{{assets}}/vendor/custombox/dist/custombox.min.js"></script>
+  <script src="{{assets}}/vendor/custombox/dist/custombox.legacy.min.js"></script>
+  <script src="{{assets}}/vendor/flatpickr/dist/flatpickr.min.js"></script>
+  <script src="{{assets}}/vendor/appear.js"></script>
+  <script src="{{assets}}/vendor/circles/circles.min.js"></script>
+  <script src="{{assets}}/vendor/fancybox/jquery.fancybox.min.js"></script>
+  <script src="{{assets}}/vendor/typed.js/lib/typed.min.js"></script>
+  <script src="{{assets}}/vendor/slick-carousel/slick/slick.js"></script>
+
+
+  <!-- JS Front -->
+  <script src="{{assets}}/js/hs.core.js"></script>
+  <script src="{{assets}}/js/components/hs.header.js"></script>
+  <script src="{{assets}}/js/components/hs.unfold.js"></script>
+  <script src="{{assets}}/js/components/hs.malihu-scrollbar.js"></script>
+  <script src="{{assets}}/js/components/hs.focus-state.js"></script>
+  <script src="{{assets}}/js/components/hs.validation.js"></script>
+  <script src="{{assets}}/js/components/hs.modal-window.js"></script>
+  <script src="{{assets}}/js/components/hs.step-form.js"></script>
+  <script src="{{assets}}/js/components/hs.fancybox.js"></script>
+  <script src="{{assets}}/js/components/hs.slick-carousel.js"></script>
+  <script src="{{assets}}/js/components/hs.show-animation.js"></script>
+  <script src="{{assets}}/js/components/hs.range-datepicker.js"></script>
+  <script src="{{assets}}/js/components/hs.chart-pie.js"></script>
+  <script src="{{assets}}/js/components/hs.progress-bar.js"></script>
+  <script src="{{assets}}/js/components/hs.svg-injector.js"></script>
+  <script src="{{assets}}/js/components/hs.go-to.js"></script>
+
+  <script src="{{assets}}/js/dashboard.main.js"></script>
+
+  <script src="{{assets}}/vendor/firebase.js"></script>
+  {% block appScript %}{% endblock %}
 </body>
 </html>

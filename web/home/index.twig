@@ -1,0 +1,53 @@
+{% extends "default_layout.twig" %}
+{% block title %}Home - Yanic{% endblock %}
+{% block container %}
+ <!-- ========== HEADER ========== -->
+ <header id="header" class="u-header u-header--bg-transparent u-header--abs-top">
+  <div class="u-header__section">
+    <div id="logoAndNav" class="container">
+      <!-- Nav -->
+      <nav class="navbar navbar-expand u-header__navbar">
+        <!-- Logo -->
+        <a class="navbar-brand u-header__navbar-brand u-header__navbar-brand-center u-header__navbar-brand-text-white" href="../home/index.html" aria-label="Front">
+          <img src="{{assets}}/img/logo_yanic_light.png" width="50px">
+          <span class="u-header__navbar-brand-text">Yanic</span>
+        </a>
+        <!-- End Logo -->
+
+        <!-- Button -->
+        <div class="ml-auto">
+          <a class="btn btn-sm btn-primary transition-3d-hover" href="https://themes.getbootstrap.com/product/front-multipurpose-responsive-template/" target="_blank">
+            Download
+          </a>
+        </div>
+        <!-- End Button -->
+      </nav>
+      <!-- End Nav -->
+    </div>
+  </div>
+</header>
+<!-- ========== END HEADER ========== -->
+
+<!-- ========== MAIN ========== -->
+<main id="content" role="main">
+  <!-- Hero Section -->
+  <div class="d-lg-flex" style="background: url({{assets}}/img/bg-shapes/bg4.jpg); background-size: cover;background-repeat: no-repeat;">
+    <div class="container d-lg-flex align-items-lg-center min-height-lg-100vh space-bottom-2 space-top-4 space-bottom-lg-3 space-lg-0">
+      <div class="w-lg-60 w-xl-50 mt-lg-9">
+        <div class="mb-6">
+          <h1 class="display-4 text-white font-weight-normal">Mini Framework</h1>
+          <p class="text-white-70">Innovative and functional web template product – Front brought to you by Htmlstream, a bunch of geeks scattered all around the world.</p>
+          <p class="text-white-70">We also offer affordable, professional and trendy customized design solutions, solely for your own project!</p>
+        </div>
+
+        <a class="btn btn-white btn-wide text-primary transition-3d-hover" href="//aitheri.tech">Ver mas</a>
+      </div>
+    </div>
+  </div>
+  <!-- End Hero Section -->
+</main>
+<!-- ========== END MAIN ========== -->
+{% endblock %}
+{% block appScript %}
+  <script src="/src/appUsers.js"></script>
+{% endblock %}
